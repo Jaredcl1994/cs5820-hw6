@@ -18,7 +18,7 @@ class YearChart {
     this.votePercentageChart = votePercentageChart;
     // the data
     this.electionWinners = electionWinners;
-    
+
     // Initializes the svg elements required for this chart
     this.margin = {top: 10, right: 20, bottom: 30, left: 50};
     let divyearChart = d3.select("#year-chart").classed("fullView", true);
@@ -156,7 +156,7 @@ class YearChart {
       this.tileChart.update(year, this.colorScale);
       this.votePercentageChart.update(year, this.colorScale);
     });
-    
+
   }
 
 }

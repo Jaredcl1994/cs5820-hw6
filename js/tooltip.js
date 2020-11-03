@@ -67,8 +67,7 @@ class Tooltip {
     // this.set(this.tooltip_html(d), true);
     this.tooltip
       .html(this.tooltip_html(d))
-      .classed('tooltip-title', true)
-    ;
+      .classed('tooltip-title', true);
     this.tooltip.style("visibility", "visible");
   }
 

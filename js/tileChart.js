@@ -51,43 +51,31 @@ class TileChart {
   /**
    * Creates tiles and tool tip for each state, legend for encoding the color scale information.
    *
-   * @param electionResult election data for the year selected
+   * @param positionData election positionData for the year selected
    * @param colorScale global quantile scale based on the winning margin between republicans and democrats
    */
-  update (electionResult, colorScale){
-
-    //Calculates the maximum number of columns to be laid out on the svg
-    // this.maxColumns = d3.max(electionResult,function(d){
-    //   return parseInt(d["Space"]);
-    // });
-
-    // //Calculates the maximum number of rows to be laid out on the svg
-    // this.maxRows = d3.max(electionResult,function(d){
-    //   return parseInt(d["Row"]);
-    // });
-
-    this.maxColumns = d3.max(electionResult, d => +d.Space) + 1;
-    this.maxRows = d3.max(electionResult, d => +d.Row) + 1;
+  update (positionData, colorScale){
+    this.maxColumns = d3.max(positionData, d => d.col) + 1;
+    this.maxRows = d3.max(positionData, d => d.row) + 1;
 
     let w = this.svgWidth/this.maxColumns;
     let h = this.svgHeight/this.maxRows;
 
-    // console.log(electionResult);
-    // console.log(this.maxColumns);
-    // console.log(this.maxRows);
+    console.log(positionData);
+    console.log(this.maxColumns);
+    console.log(this.maxRows);
 
     this.svg.html('');
     this.svg.selectAll('rect')
-      .data(electionResult)
+      .data(positionData)
       .enter()
       .append('rect')
-      .attr('x', d => w*d.Space)
-      .attr('y', d => h*d.Row)
+      .attr('x', d => w*d.col)
+      .attr('y', d => h*d.row)
       .attr('width', w)
       .attr('height', h)
       .attr('stroke-width', 1)
-      .attr('class', d=>this.chooseClass(d.State_Winner))
-      .style('fill', d => colorScale(+d.RD_Difference))
+      .style('fill', 'blue')
       .classed('tile', true)
       // .on("mouseover", d => {
       //   this.tooltip.set(this.tooltip_html(d), true);
@@ -113,12 +101,12 @@ class TileChart {
     // State abbreviation
     //--------------------------------------------------
     this.svg.selectAll('#tilename')
-      .data(electionResult)
+      .data(positionData)
       .enter()
       .append('text')
-      .attr('x', d => w*d.Space + w/2)
-      .attr('y', d => h*d.Row + h/2)
-      .attr('dy', '-.5em')
+      .attr('x', d => w*d.col + w/2)
+      .attr('y', d => h*d.row + h/2)
+      .attr('dy', '-.2em')
       .text(d => `${d.Abbreviation}`)
       .attr('text-anchor', 'middle')
       .classed('tilestext', true)
@@ -129,19 +117,19 @@ class TileChart {
     //--------------------------------------------------
     // # electoral votes
     //--------------------------------------------------
-    this.svg.selectAll('#tileev')
-      .data(electionResult)
-      .enter()
-      .append('text')
-      .attr('x', d => w*d.Space + w/2)
-      .attr('y', d => h*d.Row + h/2)
-      .attr('dy', '1em')
-      .text(d => `${d.Total_EV}`)
-      .attr('text-anchor', 'middle')
-      .classed('tilestext', true)
-      .attr('id', 'tileev')
-      .attr('pointer-events', 'none')
-    ;
+    // this.svg.selectAll('#tileev')
+      // .data(positionData)
+      // .enter()
+      // .append('text')
+      // .attr('x', d => w*d.col + w/2)
+      // .attr('y', d => h*d.row + h/2)
+      // .attr('dy', '1em')
+      // .text(d => `${d.Total_EV}`)
+      // .attr('text-anchor', 'middle')
+      // .classed('tilestext', true)
+      // .attr('id', 'tileev')
+      // .attr('pointer-events', 'none')
+    // ;
 
 
 
@@ -214,7 +202,7 @@ class TileChart {
     //Call the tool tip on hover over the tiles to display stateName, count of electoral votes
     //then, vote percentage and number of votes won by each party.
     //HINT: Use the .republican, .democrat and .independent classes to style your elements.
-    
+
   };
 
 
