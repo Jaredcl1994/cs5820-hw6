@@ -61,9 +61,15 @@ class TileChart {
     let allData = new Object();
     allData['position'] = positionData;
     allData['states'] = stateData;
-
+    let year = 2012;
     let w = this.svgWidth/this.maxColumns;
     let h = this.svgHeight/this.maxRows;
+    var keys = Object.keys(stateData[year])
+    let maxSightings = -1000;
+    for (let i=0; i<keys.length;i++) {
+      let value = stateData[year][keys[i]].sightings.length;
+      if (value > maxSightings) maxSightings = value;
+    }
 
     this.svg.html('');
     this.svg.selectAll('rect')
@@ -75,7 +81,7 @@ class TileChart {
       .attr('width', w)
       .attr('height', h)
       .attr('stroke-width', 1)
-      .style('fill', 'blue')
+      .style('fill', d => `rgba(0,0,${255*stateData[year][d.Abbreviation.toLowerCase()].sightings.length/maxSightings},0.4)`)
       .classed('tile', true)
       // .on("mouseover", d => {
       //   this.tooltip.set(this.tooltip_html(d), true);
@@ -88,7 +94,6 @@ class TileChart {
       // })
       .on("mouseover", d => {
         // get year and state
-        let year = 2012;
         let stateAndYearData = new Object();
         stateAndYearData['state'] = d.State;
         stateAndYearData['data'] = stateData[year][d.Abbreviation.toLowerCase()]
