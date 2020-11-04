@@ -12,6 +12,7 @@ class BarChart {
     let year = 2012;
     let words = ['flashing', 'ball', 'lights', 'saucer', 'diamond', 'square', 'circle', 'cloud'];
     let wordInfo = new Object();
+    let wordList = [];
     for (let word of words) {
       wordInfo[word] = {'word': word, 'count': 0};
     }
@@ -30,6 +31,7 @@ class BarChart {
     let max = -1000;
     keys = Object.keys(wordInfo);
     for (let i=0; i<keys.length; i++) {
+      wordList = wordList.concat({'word': keys[i], 'count': wordInfo[keys[i]].count});
       if (wordInfo[keys[i]].count > max) {
         max = wordInfo[keys[i]].count;
       }
@@ -73,22 +75,20 @@ class BarChart {
       .call(yAxis)
       .selectAll("text");
 
-    console.log('word info');
-    console.log(wordInfo);
-
-    let bars = d3.select('#bars')
-      .selectAll('rect')
-      .data(wordInfo)
+    let bars = d3.select('#bars');
+    console.log(yScale(0));
+    bars.selectAll('rect')
+      .data(wordList)
       .enter()
       .append('rect')
-        .attr('width', xScale.bandwidth())
+        .attr('width', function(d) {
+          return xScale.bandwidth();
+        })
         .attr('x', function(d) {
-          console.log(xScale(d.word));
           return yaxisWidth+xScale(d.word);
         })
           // no bar at the beginning thus:
         .attr("height", function(d) {
-          console.log('here');
           return height - yScale(0);
         }) // always equal to 0
         .attr("y", function(d) { return yScale(0); });
@@ -98,7 +98,7 @@ class BarChart {
     .duration(900)
     .delay(50)
       .attr('y', function(d,i) {
-        console.log('transition');
+        console.log(d.count);
         return yScale(d.count);
       })
       .attr('height', (d,i) => height-yScale(d.count))
