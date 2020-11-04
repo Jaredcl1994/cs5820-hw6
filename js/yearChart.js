@@ -1,6 +1,5 @@
 
 class YearChart {
-
   /**
    * Constructor for the Year Chart
    *
@@ -10,14 +9,26 @@ class YearChart {
    * @param electionInfo instance of ElectionInfo
    * @param electionWinners data corresponding to the winning parties over mutiple election years
    */
-  constructor (electoralVoteChart, tileChart, votePercentageChart, electionWinners) {
+  constructor (electoralVoteChart, tileChart, votePercentageChart, years) {
 
     //Creating YearChart instance
     this.electoralVoteChart = electoralVoteChart;
     this.tileChart = tileChart;
     this.votePercentageChart = votePercentageChart;
     // the data
-    this.electionWinners = electionWinners;
+    this.yearsDict = years;
+    this.dictKeysSorted = [];
+    for (const key in this.yearsDict){
+      this.dictKeysSorted.push(key);
+    }
+    this.dictKeysSorted.sort(function(a,b){return a-b})
+    console.log(this.dictKeysSorted);
+
+    this.sortedYearList = [];
+    for(const key in this.dictKeysSorted){
+      this.sortedYearList.push(this.yearsDict[this.dictKeysSorted[key]]);
+    }
+    console.log(this.sortedYearList);
 
     // Initializes the svg elements required for this chart
     this.margin = {top: 10, right: 20, bottom: 30, left: 50};
@@ -42,15 +53,14 @@ class YearChart {
    * @param party an ID for the party that is being referred to.
    */
   chooseClass (data) {
-    if (data == "R") {
-      return "yearChart republican";
-    }
-    else if (data == "D") {
-      return "yearChart democrat";
-    }
-    else if (data == "I") {
-      return "yearChart independent";
-    }
+    // if (data == "R") {
+    //   return "yearChart republican";
+    // }
+    // else if (data == "D") {
+    //   return "yearChart democrat";
+    // }
+    return "yearChart independent";
+
   }
 
   /**
@@ -74,11 +84,11 @@ class YearChart {
     // Create the chart by adding circle elements representing each election year
     let r = 10;
     let xscale = d3.scaleLinear()
-      .domain([0, this.electionWinners.length])
+      .domain([0, this.dictKeysSorted.length])
       .range([3*r, this.svgWidth-3*r]);
 
     this.svg.selectAll('line')
-      .data(this.electionWinners)
+      .data(this.sortedYearList)
       .enter()
       .append('line')
       .attr('x1', (d,i) => xscale(i))
@@ -90,28 +100,28 @@ class YearChart {
     ;
 
     this.svg.selectAll('circle')
-      .data(this.electionWinners)
+      .data(this.sortedYearList)
       .enter()
       .append('circle')
       .attr('cx', (d,i) => xscale(i))
       .attr('cy', r+4)
       .attr('r', r)
-      .attr('class', d => this.chooseClass(d.PARTY))
+      .attr('class', d => this.chooseClass(d))
       .classed('yearChart', true)
-      .attr('id', d => `y${d.YEAR}`)
+      .attr('id', (d,i) => `y${this.dictKeysSorted[i]}`)
       .on('click', d => {
         this.selectYear(d3.select(d3.event.target), d);
       });
     ;
 
     this.svg.selectAll('text')
-      .data(this.electionWinners)
+      .data(this.sortedYearList)
       .enter()
       .append('text')
       .attr('x', (d,i) => xscale(i))
       .attr('y', r+8)
       .attr('dy', '1.3em')
-      .text(d => d.YEAR)
+      .text((d,i) => this.dictKeysSorted[i])
       .classed('yeartext', true)
     ;
 
