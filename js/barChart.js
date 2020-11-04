@@ -16,7 +16,7 @@ class BarChart {
       wordInfo[word] = {'word': word, 'count': 0};
     }
 
-    let keys = Object.keys(allData[year])
+    let keys = Object.keys(allData[year]);
     for (let i=0; i<keys.length; i++) {
       let statewords = allData[year][keys[i]].words.split(' ');
       for (let word of statewords) {
@@ -27,7 +27,13 @@ class BarChart {
     }
 
     let min = 0;
-    let max = d3.max(wordInfo, d => d.count);
+    let max = -1000;
+    keys = Object.keys(wordInfo);
+    for (let i=0; i<keys.length; i++) {
+      if (wordInfo[keys[i]].count > max) {
+        max = wordInfo[keys[i]].count;
+      }
+    }
 
     let height = 200;
 
@@ -59,33 +65,44 @@ class BarChart {
       .attr("transform", "rotate(90)")
       .attr("x", 9)
       .attr("dy", "-.35em")
-      .style("text-anchor", "start")
-    ;
+      .style("text-anchor", "start");
 
     let yAxis = d3.axisLeft(yScale);
     d3.select('#yAxis')
       .attr("transform", `translate(${yaxisWidth}, 0)`)
       .call(yAxis)
-      .selectAll("text")
-    ;
+      .selectAll("text");
 
-    let bars = d3.select('#bars').selectAll('rect')
-      .data(wordInfo).enter().append('rect')
-      .attr('width', xScale.bandwidth())
-      .attr('x', (d,i) => yaxisWidth+xScale(d.word))
-        // no bar at the beginning thus:
-    .attr("height", function(d) { return height - yScale(0); }) // always equal to 0
-    .attr("y", function(d) { return yScale(0); })
-    ;
+    console.log('word info');
+    console.log(wordInfo);
+
+    let bars = d3.select('#bars')
+      .selectAll('rect')
+      .data(wordInfo)
+      .enter()
+      .append('rect')
+        .attr('width', xScale.bandwidth())
+        .attr('x', function(d) {
+          console.log(xScale(d.word));
+          return yaxisWidth+xScale(d.word);
+        })
+          // no bar at the beginning thus:
+        .attr("height", function(d) {
+          console.log('here');
+          return height - yScale(0);
+        }) // always equal to 0
+        .attr("y", function(d) { return yScale(0); });
 
     d3.select('#bars').selectAll('rect')
     .transition()
     .duration(900)
     .delay(50)
-            .attr('y', (d,i) => yScale(d.count))
+      .attr('y', function(d,i) {
+        console.log('transition');
+        return yScale(d.count);
+      })
       .attr('height', (d,i) => height-yScale(d.count))
-      .attr('fill', (d,i) => colorScale(d.count))
-    ;
+      .attr('fill', (d,i) => colorScale(d.count));
 
 
     let bc = this;
