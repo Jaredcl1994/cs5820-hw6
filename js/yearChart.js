@@ -44,7 +44,7 @@ class YearChart {
       .attr("width", this.svgWidth)
       .attr("height", this.svgHeight);
 
-    this.selected = null;
+    this.selectedNode = null;
   }
 
   /**
@@ -110,7 +110,7 @@ class YearChart {
       .classed('yearChart', true)
       .attr('id', (d,i) => `y${this.dictKeysSorted[i]}`)
       .on('click', (d,i) => {
-        this.selectYear(`${this.dictKeysSorted[i]}`, d);
+        this.selectYear(`${this.dictKeysSorted[i]}`, d,d3.select(d3.event.target));
       })
       .on('mouseover',function(d,i){
         d3.select(this).attr('r', r*2)
@@ -159,17 +159,17 @@ class YearChart {
 
   }
 
-  selectYear(selectedYear, selectedYearData) {
+  selectYear(selectedYear, selectedYearData, selectedNode) {
 
     console.log(selectedYear);
     console.log(selectedYearData);
 
 
-    if (this.selected) {
-      this.selected.classed('highlighted', false);
+    if (this.selectedNode) {
+      this.selectedNode.classed('highlighted', false);
     }
-    this.selected = selected;
-    this.selected.classed('highlighted', true);
+    this.selectedNode = selectedNode;
+    this.selectedNode.classed('highlighted', true);
 
     // d3.csv(`data/Year_Timeline_${d.YEAR}.csv`).then(year => {
       // console.log(year)

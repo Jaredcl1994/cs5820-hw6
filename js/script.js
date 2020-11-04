@@ -10,7 +10,6 @@ let shiftChart = new ShiftChart();
 
 let electoralVoteChart = new ElectoralVoteChart(shiftChart, tooltip);
 
-
 let globalDict = new Object();
 
 // Load the data corresponding to all the election years.
@@ -78,7 +77,7 @@ d3.csv("data/state-position.csv", function(positionData) {
                                   votePercentageChart, globalDict);
     yearChart.update();
 
-    // let s = d3.select('#y2014');
-    yearChart.selectYear('2014', globalDict['2014']);
+    let s = d3.select('#y2014');
+    yearChart.selectYear('2014', globalDict['2014'],s);
   });
 });
