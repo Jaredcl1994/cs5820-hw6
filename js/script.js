@@ -22,12 +22,41 @@ d3.csv("data/state-position.csv", function(positionData) {
 
   globalDict = new Object();
   d3.csv("data/scrubbed.csv", function(entry){
-    date = entry.datePosted;
-    let year = date.substring(date.length-4, date.length);
-    // console.log(year);
-    if(!globalDict.hasOwnProperty(year)){
-      globalDict[year] = new Object();
+    if(entry.country==="us"){
+      date = entry.datePosted;
+      year = date.substring(date.length-4, date.length);
+      // console.log(year);
+      if(!globalDict.hasOwnProperty(year)){
+        globalDict[year] = {};
+      }
+
+      currentYearDict = globalDict[year];
+
+      // making sure the state is in the dict
+      state = entry.state;
+      if(!currentYearDict.hasOwnProperty(state)){
+        currentYearDict[state] = {"sightings":[], "shapes":{}, "words":""};
+      }
+
+      currentYearStateDict = currentYearDict[state];
+
+      // pushing the current sighting to the dict
+      currentYearStateDict.sightings.push(entry);
+
+
+      // adding current shape to the dictionary or incrementing its count
+      curShape = entry.shape;
+      if(!currentYearStateDict.shapes.hasOwnProperty(curShape)){
+        currentYearStateDict.shapes[curShape] = 1;
+      }
+      else{
+        currentYearStateDict.shapes[curShape] += 1;
+      }
+
+      // adding words to the dictionary
+      currentYearStateDict.words += entry.comments;
     }
+
   }).then(entry =>{
     console.log(globalDict)
     console.log(positionData);
