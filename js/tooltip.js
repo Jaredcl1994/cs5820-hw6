@@ -45,7 +45,7 @@ class Tooltip {
   tooltip_html(d) {
     let text = "<h2 class ="  + this.chooseClass(d.State_Winner) +
       " >" + d.state + "</h2>";
-    text +=  "UFO Sightings: " + d.data.sightings.length;
+    text +=  "UFO Sightings: " + ((d.data) ? d.data.sightings.length : 0);
     text += "<ul>"
     // Democrat
     // text += "<li class = democrat>" +

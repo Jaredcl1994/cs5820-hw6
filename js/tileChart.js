@@ -43,7 +43,7 @@ class TileChart {
     else if (party== "D"){
       return "democrat";
     }
-    else if (party == "I"){
+    else{
       return "independent";
     }
   }
@@ -55,16 +55,19 @@ class TileChart {
    * @param colorScale global quantile scale based on the winning margin between republicans and democrats
    * @param stateData state ufo data divided by year
    */
-  update (positionData, colorScale, stateData){
+  update (positionData, colorScale, stateData, givenyear){
     this.maxColumns = d3.max(positionData, d => d.col) + 1;
     this.maxRows = d3.max(positionData, d => d.row) + 1;
     let allData = new Object();
     allData['position'] = positionData;
     allData['states'] = stateData;
-    let year = 2012;
+    let year = givenyear;
     let w = this.svgWidth/this.maxColumns;
     let h = this.svgHeight/this.maxRows;
+
+    console.log(givenyear);
     var keys = Object.keys(stateData[year])
+    console.log(keys);
     let maxSightings = -1000;
     for (let i=0; i<keys.length;i++) {
       let value = stateData[year][keys[i]].sightings.length;
@@ -81,7 +84,7 @@ class TileChart {
       .attr('width', w)
       .attr('height', h)
       .attr('stroke-width', 1)
-      .style('fill', d => `rgba(0,0,${255*stateData[year][d.Abbreviation.toLowerCase()].sightings.length/maxSightings},0.4)`)
+      .style('fill', d => `rgba(0,0,${255* ((stateData[year][d.Abbreviation.toLowerCase()]) ? (stateData[year][d.Abbreviation.toLowerCase()].sightings.length/maxSightings):0) },0.5)`)
       .classed('tile', true)
       // .on("mouseover", d => {
       //   this.tooltip.set(this.tooltip_html(d), true);
