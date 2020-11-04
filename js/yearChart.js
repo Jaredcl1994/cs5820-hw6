@@ -109,8 +109,14 @@ class YearChart {
       .attr('class', d => this.chooseClass(d))
       .classed('yearChart', true)
       .attr('id', (d,i) => `y${this.dictKeysSorted[i]}`)
-      .on('click', d => {
-        this.selectYear(d3.select(d3.event.target), d);
+      .on('click', (d,i) => {
+        this.selectYear(`${this.dictKeysSorted[i]}`, d);
+      })
+      .on('mouseover',function(d,i){
+        d3.select(this).attr('r', r*2)
+      })
+      .on('mouseout',function(d,i){
+        d3.select(this).attr('r', r)
       });
     ;
 
@@ -153,19 +159,23 @@ class YearChart {
 
   }
 
-  selectYear(selected, d) {
+  selectYear(selectedYear, selectedYearData) {
+
+    console.log(selectedYear);
+    console.log(selectedYearData);
+
     if (this.selected) {
       this.selected.classed('highlighted', false);
     }
     this.selected = selected;
     this.selected.classed('highlighted', true);
 
-    d3.csv(`data/Year_Timeline_${d.YEAR}.csv`).then(year => {
-      // console.log(year);
-      this.electoralVoteChart.update(year, this.colorScale);
-      this.tileChart.update(year, this.colorScale);
-      this.votePercentageChart.update(year, this.colorScale);
-    });
+    // d3.csv(`data/Year_Timeline_${d.YEAR}.csv`).then(year => {
+      // console.log(year)
+      // this.electoralVoteChart.update(year, this.colorScale);
+      // this.votePercentageChart.update(year, this.colorScale);
+      // this.tileChart.update(year, this.colorScale);
+    // });
 
   }
 

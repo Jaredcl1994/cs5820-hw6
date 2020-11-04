@@ -74,9 +74,9 @@ d3.csv("data/state-position.csv", function(positionData) {
     tileChart.update(positionData, colorScale, globalDict);
     barChart.update(globalDict);
 
-    // let yearChart = new YearChart(electoralVoteChart, tileChart,
-                                  // votePercentageChart, alldata);
-    // yearChart.update();
+    let yearChart = new YearChart(electoralVoteChart, tileChart,
+                                  votePercentageChart, globalDict);
+    yearChart.update();
 
     // let s = d3.select('#y2012');
     // yearChart.selectYear(s, s.data()[0]);
