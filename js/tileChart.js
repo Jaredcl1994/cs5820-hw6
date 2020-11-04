@@ -53,17 +53,17 @@ class TileChart {
    *
    * @param positionData election positionData for the year selected
    * @param colorScale global quantile scale based on the winning margin between republicans and democrats
+   * @param stateData state ufo data divided by year
    */
-  update (positionData, colorScale){
+  update (positionData, colorScale, stateData){
     this.maxColumns = d3.max(positionData, d => d.col) + 1;
     this.maxRows = d3.max(positionData, d => d.row) + 1;
+    let allData = new Object();
+    allData['position'] = positionData;
+    allData['states'] = stateData;
 
     let w = this.svgWidth/this.maxColumns;
     let h = this.svgHeight/this.maxRows;
-
-    console.log(positionData);
-    console.log(this.maxColumns);
-    console.log(this.maxRows);
 
     this.svg.html('');
     this.svg.selectAll('rect')
@@ -87,7 +87,12 @@ class TileChart {
       //   this.tooltip.set('', false);
       // })
       .on("mouseover", d => {
-        this.tooltip.mouseover(d);
+        // get year and state
+        let year = 2012;
+        let stateAndYearData = new Object();
+        stateAndYearData['state'] = d.State;
+        stateAndYearData['data'] = stateData[year][d.Abbreviation.toLowerCase()]
+        this.tooltip.mouseover(stateAndYearData);
       })
       .on("mousemove", () => {
         this.tooltip.mousemove();
@@ -106,7 +111,7 @@ class TileChart {
       .append('text')
       .attr('x', d => w*d.col + w/2)
       .attr('y', d => h*d.row + h/2)
-      .attr('dy', '-.2em')
+      .attr('dy', '-.1em')
       .text(d => `${d.Abbreviation}`)
       .attr('text-anchor', 'middle')
       .classed('tilestext', true)

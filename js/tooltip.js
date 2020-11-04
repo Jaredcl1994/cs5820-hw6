@@ -44,22 +44,22 @@ class Tooltip {
    */
   tooltip_html(d) {
     let text = "<h2 class ="  + this.chooseClass(d.State_Winner) +
-      " >" + d.State + "</h2>";
-    text +=  "Electoral Votes: " + d.Total_EV;
+      " >" + d.state + "</h2>";
+    text +=  "UFO Sightings: " + d.data.sightings.length;
     text += "<ul>"
     // Democrat
-    text += "<li class = democrat>" +
-      d.D_Nominee_prop+":\t\t"+d.D_Votes+"("+d.D_Percentage+"%)" + "</li>"
+    // text += "<li class = democrat>" +
+      // d.D_Nominee_prop+":\t\t"+d.D_Votes+"("+d.D_Percentage+"%)" + "</li>"
     // Republican
-    text += "<li class = republican>" +
-      d.R_Nominee_prop+":\t\t"+d.R_Votes+"("+d.R_Percentage+"%)" + "</li>"
+    // text += "<li class = republican>" +
+      // d.R_Nominee_prop+":\t\t"+d.R_Votes+"("+d.R_Percentage+"%)" + "</li>"
     // Independent
-    if (d.I_Percentage) {
-      text += "<li class = independent>" +
-        d.I_Nominee_prop+":\t\t"+d.I_Votes+"("+d.I_Percentage+"%)" + "</li>"
-    }
-    text += "</ul>";
-
+    // if (d.I_Percentage) {
+      // text += "<li class = independent>" +
+        // d.I_Nominee_prop+":\t\t"+d.I_Votes+"("+d.I_Percentage+"%)" + "</li>"
+    // }
+    // text += "</ul>";
+//
     return text;
   }
 

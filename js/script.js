@@ -19,7 +19,6 @@ d3.csv("data/state-position.csv", function(positionData) {
   positionData.col = +positionData.Column;
   return positionData;
 }).then(positionData => {
-
   globalDict = new Object();
   d3.csv("data/scrubbed.csv", function(entry){
     if(entry.country==="us"){
@@ -56,9 +55,9 @@ d3.csv("data/state-position.csv", function(positionData) {
       // adding words to the dictionary
       currentYearStateDict.words += entry.comments;
     }
-
+    return entry;
   }).then(entry =>{
-    console.log(globalDict)
+    console.log(globalDict);
     console.log(positionData);
       //Domain definition for global color scale
       let domain = [-60, -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50, 60];
@@ -70,7 +69,7 @@ d3.csv("data/state-position.csv", function(positionData) {
           .domain(domain)
           .range(range);
 
-    tileChart.update(positionData, colorScale);
+    tileChart.update(positionData, colorScale, globalDict);
 
     // let yearChart = new YearChart(electoralVoteChart, tileChart,
                                   // votePercentageChart, alldata);

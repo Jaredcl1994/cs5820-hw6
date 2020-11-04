@@ -20,10 +20,18 @@ h1 {
     stroke-width: 4;
 }
 
-.yeartext, .tilestext, .brushtext{
+.yeartext, .brushtext{
     text-anchor:middle;
     font-size: 24px;
     fill: #565656;
+    stroke-width: 0.1px;
+    /*stroke: #e5e5e5;*/
+}
+
+.tilestext {
+    text-anchor:middle;
+    font-size: 24px;
+    fill: black;
     stroke-width: 0.1px;
     /*stroke: #e5e5e5;*/
 }
@@ -149,5 +157,3 @@ h3{
     text-anchor:middle;
     font-size: 32px;
 }
-
-
