@@ -1,5 +1,7 @@
 let tooltip = new Tooltip();
 
+let barChart = new BarChart();
+
 let votePercentageChart = new VotePercentageChart(tooltip);
 
 let tileChart = new TileChart(tooltip);
@@ -70,6 +72,7 @@ d3.csv("data/state-position.csv", function(positionData) {
           .range(range);
 
     tileChart.update(positionData, colorScale, globalDict);
+    barChart.update(globalDict);
 
     // let yearChart = new YearChart(electoralVoteChart, tileChart,
                                   // votePercentageChart, alldata);
