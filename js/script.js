@@ -71,10 +71,10 @@ d3.csv("data/state-position.csv", function(positionData) {
           .range(range);
 
     tileChart.update(positionData, colorScale, globalDict);
-    barChart.update(globalDict);
+    // barChart.update(globalDict);
 
     let yearChart = new YearChart(electoralVoteChart, tileChart,
-                                  votePercentageChart, globalDict);
+                                  votePercentageChart, barChart, globalDict);
     yearChart.update();
 
     let s = d3.select('#y2014');

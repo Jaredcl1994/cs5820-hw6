@@ -8,8 +8,8 @@ class BarChart {
    * Render and update the bar chart based on the selection of the country from the map
   * @param allData data including population, gdp, mortality rate for one entity.
    */
-  update(allData) {
-    let year = 2012;
+  update(allData, yearName) {
+    let year = yearName;
     let words = ['flashing', 'ball', 'lights', 'saucer', 'diamond', 'square', 'circle', 'cloud'];
     let wordInfo = new Object();
     let wordList = [];
