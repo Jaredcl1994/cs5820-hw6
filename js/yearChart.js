@@ -171,12 +171,11 @@ class YearChart {
     this.selectedNode = selectedNode;
     this.selectedNode.classed('highlighted', true);
 
-    // d3.csv(`data/Year_Timeline_${d.YEAR}.csv`).then(year => {
-      // console.log(year)
-      // this.electoralVoteChart.update(year, this.colorScale);
-      // this.votePercentageChart.update(year, this.colorScale);
-      // this.tileChart.update(year, this.colorScale);
-    // });
+  
+    this.electoralVoteChart.update(selectedYearData, this.colorScale);
+    this.votePercentageChart.update(selectedYearData, this.colorScale);
+    this.tileChart.update(selectedYearData, this.colorScale);
+
 
   }
 
