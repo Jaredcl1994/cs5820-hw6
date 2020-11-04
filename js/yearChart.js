@@ -164,6 +164,7 @@ class YearChart {
     console.log(selectedYear);
     console.log(selectedYearData);
 
+
     if (this.selected) {
       this.selected.classed('highlighted', false);
     }

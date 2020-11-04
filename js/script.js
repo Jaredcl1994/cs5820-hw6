@@ -78,7 +78,7 @@ d3.csv("data/state-position.csv", function(positionData) {
                                   votePercentageChart, globalDict);
     yearChart.update();
 
-    // let s = d3.select('#y2012');
-    // yearChart.selectYear(s, s.data()[0]);
+    // let s = d3.select('#y2014');
+    yearChart.selectYear('2014', globalDict['2014']);
   });
 });
