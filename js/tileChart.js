@@ -84,7 +84,7 @@ class TileChart {
       .attr('width', w)
       .attr('height', h)
       .attr('stroke-width', 1)
-      .style('fill', d => `rgba(0,0,${255* ((stateData[year][d.Abbreviation.toLowerCase()]) ? (stateData[year][d.Abbreviation.toLowerCase()].sightings.length/maxSightings):0) },0.5)`)
+      .style('fill', d => `rgba(${255* ((stateData[year][d.Abbreviation.toLowerCase()]) ? (stateData[year][d.Abbreviation.toLowerCase()].sightings.length/(maxSightings*2))*5:0) },0,0,0.7)`)
       .classed('tile', true)
       // .on("mouseover", d => {
       //   this.tooltip.set(this.tooltip_html(d), true);
@@ -118,7 +118,7 @@ class TileChart {
       .enter()
       .append('text')
       .attr('x', d => w*d.col + w/2)
-      .attr('y', d => h*d.row + h/2)
+      .attr('y', d => h*d.row + h/2 + 10)
       .attr('dy', '-.1em')
       .text(d => `${d.Abbreviation}`)
       .attr('text-anchor', 'middle')
