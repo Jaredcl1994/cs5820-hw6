@@ -2,13 +2,13 @@ let tooltip = new Tooltip();
 
 let barChart = new BarChart();
 
-let votePercentageChart = new VotePercentageChart(tooltip);
+// let votePercentageChart = new VotePercentageChart(tooltip);
 
 let tileChart = new TileChart(tooltip);
 
 let shiftChart = new ShiftChart();
 
-let electoralVoteChart = new ElectoralVoteChart(shiftChart, tooltip);
+// let electoralVoteChart = new ElectoralVoteChart(shiftChart, tooltip);
 
 let globalDict = new Object();
 
@@ -73,8 +73,7 @@ d3.csv("data/state-position.csv", function(positionData) {
     // tileChart.update(positionData, colorScale, globalDict, '2014');
     // barChart.update(globalDict);
 
-    let yearChart = new YearChart(electoralVoteChart, tileChart,
-                                  votePercentageChart, barChart, globalDict, positionData);
+    let yearChart = new YearChart(tileChart, barChart, globalDict, positionData);
     yearChart.update();
 
     let s = d3.select('#y2014');

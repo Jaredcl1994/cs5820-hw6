@@ -14,7 +14,8 @@ class TileChart {
     let svgBounds = divTiles.node().getBoundingClientRect();
     this.svgWidth = svgBounds.width - this.margin.left - this.margin.right;
     this.svgHeight = this.svgWidth/2;
-    let legendHeight = 150;
+
+    let legendHeight = 0;
     //add the svg to the div
     let legend = d3.select("#legend").classed("content",true);
 

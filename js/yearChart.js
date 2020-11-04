@@ -9,12 +9,10 @@ class YearChart {
    * @param electionInfo instance of ElectionInfo
    * @param electionWinners data corresponding to the winning parties over mutiple election years
    */
-  constructor (electoralVoteChart, tileChart, votePercentageChart, barChart, years, positionData) {
+  constructor (tileChart, barChart, years, positionData) {
 
     //Creating YearChart instance
-    this.electoralVoteChart = electoralVoteChart;
     this.tileChart = tileChart;
-    this.votePercentageChart = votePercentageChart;
     this.barChart = barChart;
     this.positionData = positionData;
     // the data
