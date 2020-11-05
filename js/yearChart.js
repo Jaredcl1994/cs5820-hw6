@@ -9,12 +9,13 @@ class YearChart {
    * @param electionInfo instance of ElectionInfo
    * @param electionWinners data corresponding to the winning parties over mutiple election years
    */
-  constructor (tileChart, barChart, years, positionData) {
+  constructor (tileChart, barChart, percentageChart, years, positionData) {
 
     //Creating YearChart instance
     this.tileChart = tileChart;
     this.barChart = barChart;
     this.positionData = positionData;
+    this.percentageChart = percentageChart;
     // the data
     this.yearsDict = years;
     this.dictKeysSorted = [];
@@ -172,7 +173,7 @@ class YearChart {
     this.selectedNode.classed('highlighted', true);
 
     this.barChart.update(this.yearsDict, selectedYear);
-    // this.votePercentageChart.update(selectedYearData, this.colorScale);
+    this.percentageChart.update(selectedYearData, this.colorScale);
     // this.electoralVoteChart.update(selectedYearData, this.colorScale);
     // this.tileChart.update(selectedYearData, this.colorScale);
     this.tileChart.update(this.positionData, this.colorScale, this.yearsDict, selectedYear);

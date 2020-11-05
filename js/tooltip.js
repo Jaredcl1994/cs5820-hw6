@@ -62,6 +62,21 @@ class Tooltip {
 //
     return text;
   }
+  tooltip_html2(d) {
+    let text = "<h2 class ="  + this.chooseClass(d.State_Winner) +
+      " >" + d.shape + "</h2>";
+    text +=  (d.percent.toFixed(2)) + "%";
+    text += "<ul>"
+    return text;
+  }
+  mouseover2(d) {
+    // this.set(this.tooltip_html(d), true);
+    this.tooltip
+      .html(this.tooltip_html2(d))
+      .classed('tooltip-title', true);
+    this.tooltip.style("visibility", "visible");
+  }
+
 
   mouseover(d) {
     // this.set(this.tooltip_html(d), true);

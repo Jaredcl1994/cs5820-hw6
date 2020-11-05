@@ -10,7 +10,7 @@ class BarChart {
    */
   update(allData, yearName) {
     let year = yearName;
-    let words = ['flashing', 'ball', 'lights', 'saucer', 'diamond', 'square', 'circle', 'cloud'];
+    let words = ['flashing', 'ball', 'saucer', 'diamond', 'square', 'circle', 'cloud'];
     let wordInfo = new Object();
     let wordList = [];
     for (let word of words) {

@@ -45,21 +45,18 @@ class VotePercentageChart {
    * @param tooltip_data information that needs to be populated in the tool tip
    * @return text HTML content for toop tip
    */
-  tooltip_render (tooltip_data) {
+  tooltip_render (data) {
     let text = "<ul>";
-    tooltip_data.result.forEach((row)=>{
-      text += "<li class = " + this.chooseClass(row.party)+ ">" + row.nominee+":\t\t"+row.votecount+"("+row.percentage+"%)" + "</li>"
-    });
-
+    text += "<li >" + data.shape+":\t\t"+"("+data.percentage+"%)" + "</li>";
     return text;
   }
 
   /**
    * Creates the stacked bar chart, text content and tool tips for Vote Percentage chart
    *
-   * @param electionResult election data for the year selected
+   * @param selectedYearData election data for the year selected
    */
-  update (electionResult){
+  update (selectedYearData){
 
     // //for reference:https://github.com/Caged/d3-tip
     // //Use this tool tip element to handle any hover over the chart
@@ -84,29 +81,55 @@ class VotePercentageChart {
     //   });
 
 
-    // console.log(electionResult);
-    // let min = d3.min(electionResult, d => +d.RD_Difference);
-    // let max = d3.max(electionResult, d => +d.RD_Difference);
+    // console.log(selectedYearData);
+    // let min = d3.min(selectedYearData, d => +d.RD_Difference);
+    // let max = d3.max(selectedYearData, d => +d.RD_Difference);
     // console.log(`min = ${min} max = ${max}`);
 
     //----------------------------------------
     // Gather statistics
     //----------------------------------------
-    let Iperc = (+electionResult[0].I_PopularPercentage.slice(0,-1))/100;
-    let Dperc = (+electionResult[0].D_PopularPercentage.slice(0,-1))/100;
-    let Rperc = (+electionResult[0].R_PopularPercentage.slice(0,-1))/100;
+    // add up every shape for every state for the current year
+    let shapes = new Object();
+    let stateKeys = Object.keys(selectedYearData);
+    for (let i=0; i<stateKeys.length; i++) {
+      let shapeKeys = Object.keys(selectedYearData[stateKeys[i]].shapes);
+      for (let j=0; j<shapeKeys.length; j++) {
+        let currShape = shapeKeys[j];
+        if (Object.keys(shapes).includes(currShape)) {
+          shapes[currShape].count += 1;
+        } else {
+          shapes[currShape] = {'count': 1, 'shape': currShape};
+        }
+      }
+    }
+    console.log(shapes);
+    // get a list that you can pass in to functions of this data
+    let shapesList = Object.values(shapes);
+    // get percentages of each shape
+    let percentages = [];
+    let total_count = 0;
+    shapesList.forEach(function(d) {
+      total_count += d.count;
+    });
+    shapesList.forEach(function(d) {
+      percentages = percentages.concat({'shape': d.shape, 'percent': d.count/total_count});
+    })
+    // let Iperc = (+selectedYearData[0].I_PopularPercentage.slice(0,-1))/100;
+    // let Dperc = (+selectedYearData[0].D_PopularPercentage.slice(0,-1))/100;
+    // let Rperc = (+selectedYearData[0].R_PopularPercentage.slice(0,-1))/100;
     // console.log(Dperc);
     // console.log(Rperc);
     // console.log(Iperc);
 
-    let data = [
-      { pos : 0, perc : Iperc, party : 'independent', anchor : 'start',
-        candidate : electionResult[0].I_Nominee_prop },
-      { pos : Iperc, perc : Dperc, party : 'democrat', anchor : 'middle',
-        candidate : electionResult[0].D_Nominee_prop },
-      { pos : Iperc+Dperc, perc : Rperc, party : 'republican', anchor : 'middle',
-        candidate : electionResult[0].R_Nominee_prop},
-    ];
+    // let data = [
+    //   { pos : 0, perc : Iperc, party : 'independent', anchor : 'start',
+    //     candidate : selectedYearData[0].I_Nominee_prop },
+    //   { pos : Iperc, perc : Dperc, party : 'democrat', anchor : 'middle',
+    //     candidate : selectedYearData[0].D_Nominee_prop },
+    //   { pos : Iperc+Dperc, perc : Rperc, party : 'republican', anchor : 'middle',
+    //     candidate : selectedYearData[0].R_Nominee_prop},
+    // ];
 
     //----------------------------------------
     // Add rectangles. Maintain a position to
@@ -117,71 +140,61 @@ class VotePercentageChart {
     const bary = 70;
     const f = this.svgWidth / 1;
 
+    console.log(percentages);
+    console.log(total_count);
+    let currentPosition = 0;
     this.svg.html('');
     this.svg.selectAll('rect')
-      .data(data)
+      .data(percentages)
       .enter()
       .append('rect')
-      .attr('x', d => f*d.pos)
+      .attr('x', function(d) {
+        let tempPosition = currentPosition;
+        currentPosition += f*d.percent;
+        return tempPosition;
+      })
       .attr('y', bary)
-      .attr('width', d => f*d.perc)
+      .attr('width', d => f*d.percent)
       .attr('height', barHeight)
       .attr('stroke-width', 1)
-      .attr('class', d => d.party)
+      .attr('fill', d => `rgba(${Math.random()*255},${Math.random()*255},${Math.random()*255})`)
       .classed('votesPercentage', true)
-      // .on("mouseover", d => {
-      //   // this.tooltip.set(d.State, true);
-      //   // this.tooltip.set(this.tooltip_render(, true);
-      // })
-      // .on("mousemove", () => {
-      //   this.tooltip.setPosition();
-      // })
-      // .on("mouseout", () => {
-      //   this.tooltip.set('', false);
-      // })
-    ;
+      .on("mouseover", d => {
+        this.tooltip.mouseover2(d);
+      })
+      .on("mousemove", () => {
+        this.tooltip.mousemove();
+      })
+      .on("mouseout", () => {
+        this.tooltip.mouseout();
+      });
 
     //----------------------------------------
     // Add a centerline
     //----------------------------------------
-    let centerline = this.svg.selectAll('#vcenterline')
-      .data([1]);
-    centerline
-      .enter()
-      .append('line')
-      .merge(centerline)
-      .attr('x1', this.svgWidth/2)
-      .attr('y1', bary-5)
-      .attr('x2', this.svgWidth/2)
-      .attr('y2', bary+barHeight+5)
-      .attr('stroke', 'black')
-      .attr('id', 'vcenterline')
-    ;
-
     //----------------------------------------
     // Text: midline
     //----------------------------------------
-    let centertext = this.svg.selectAll('#vcentertext')
-      .data([1]);
-    centertext
-      .enter()
-      .append('text')
-      .merge(centertext)
-      .attr('x', this.svgWidth/2)
-      .attr('y', bary-20)
-      // .attr('stroke', 'black')
-      .text('Popular Vote (50%)')
-      .attr('text-anchor', 'middle')
-      // .attr('font-size', '24px')
-      .classed('votesPercentageText', true)
-      .attr('id', 'vcentertext')
-    ;
-
+    // let centertext = this.svg.selectAll('#vcentertext')
+    //   .data([1]);
+    // centertext
+    //   .enter()
+    //   .append('text')
+    //   .merge(centertext)
+    //   .attr('x', this.svgWidth/2)
+    //   .attr('y', bary-20)
+    //   // .attr('stroke', 'black')
+    //   .text('Popular Vote (50%)')
+    //   .attr('text-anchor', 'middle')
+    //   // .attr('font-size', '24px')
+    //   .classed('votesPercentageText', true)
+    //   .attr('id', 'vcentertext');
+    //
     //----------------------------------------
     // Text: # votes won
     //----------------------------------------
     let Vtext = this.svg.selectAll('#vtext')
-      .data(data);
+      .data(percentages);
     Vtext
       .enter()
       .append('text')
@@ -203,7 +216,7 @@ class VotePercentageChart {
     // Text: Candidate
     //----------------------------------------
     let Ctext = this.svg.selectAll('#ctext')
-      .data(data);
+      .data(percentages);
     Ctext
       .enter()
       .append('text')
