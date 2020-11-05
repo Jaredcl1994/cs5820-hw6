@@ -60,7 +60,7 @@ class YearChart {
     // else if (data == "D") {
     //   return "yearChart democrat";
     // }
-    return "yearChart independent";
+    return "yearChart";
 
   }
 
@@ -108,6 +108,7 @@ class YearChart {
       .attr('cy', r+4)
       .attr('r', r)
       .attr('class', d => this.chooseClass(d))
+      .attr('fill', d => `rgba(${d['ca'].sightings.length*255/1000},0,0)`)
       .classed('yearChart', true)
       .attr('id', (d,i) => `y${this.dictKeysSorted[i]}`)
       .on('click', (d,i) => {
