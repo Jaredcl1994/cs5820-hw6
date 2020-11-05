@@ -115,6 +115,7 @@ class VotePercentageChart {
     shapesList.forEach(function(d) {
       percentages = percentages.concat({'shape': d.shape, 'percent': d.count/total_count});
     })
+    percentages.sort((a,b) => a.percent - b.percent);
     // let Iperc = (+selectedYearData[0].I_PopularPercentage.slice(0,-1))/100;
     // let Dperc = (+selectedYearData[0].D_PopularPercentage.slice(0,-1))/100;
     // let Rperc = (+selectedYearData[0].R_PopularPercentage.slice(0,-1))/100;
@@ -194,45 +195,43 @@ class VotePercentageChart {
     // Text: # votes won
     //----------------------------------------
     let Vtext = this.svg.selectAll('#vtext')
-      .data(percentages);
+      .data(['0', '0.25', '0.5', '0.75', '1.0']);
     Vtext
       .enter()
       .append('text')
       .merge(Vtext)
-      .attr('x', d => d.pos > -1 ? f*(d.pos+d.perc/2) : this.svgWidth)
+      .attr('x', (d,i) => i==4 ?f-24 :i/4*f)
       .attr('y', bary-20)
       // .text(d => d.num > 0 ? d.num : '')
-      .text(d => d.perc > 0 ? `${(100*d.perc).toFixed(1)}%` : '')
+      .text(d => d)
       // .attr('text-anchor',  d => d.pos==-1 ? 'end' : 'start')
       .style('text-anchor',  d => d.anchor)
       // .attr('font-size', '24px')
       // .attr('class', d=>this.chooseClass(d.theclass))
-      .attr('class', d=>d.party)
       .classed('electoralVoteText', true)
-      .attr('id', 'vtext')
-    ;
+      .attr('id', 'vtext');
 
     //----------------------------------------
     // Text: Candidate
     //----------------------------------------
-    let Ctext = this.svg.selectAll('#ctext')
-      .data(percentages);
-    Ctext
-      .enter()
-      .append('text')
-      .merge(Ctext)
-      .attr('x', d => d.pos > -1 ? f*(d.pos+d.perc/2) : this.svgWidth)
-      .attr('y', bary-50)
+    // let Ctext = this.svg.selectAll('#ctext')
+      // .data(percentages);
+    // Ctext
+      // .enter()
+      // .append('text')
+      // .merge(Ctext)
+      // .attr('x', d => d.pos > -1 ? f*(d.pos+d.perc/2) : this.svgWidth)
+      // .attr('y', bary-50)
       // .text(d => d.num > 0 ? d.num : '')
-      .text(d => d.perc > 0 ? d.candidate : '')
+      // .text(d => d.perc > 0 ? d.candidate : '')
       // .attr('text-anchor',  d => d.pos==-1 ? 'end' : 'start')
-      .style('text-anchor', d => d.anchor)
+      // .style('text-anchor', d => d.anchor)
       // .attr('font-size', '24px')
       // .attr('class', d=>this.chooseClass(d.theclass))
-      .attr('class', d=>d.party)
-      .classed('electoralVoteText', true)
-      .attr('id', 'ctext')
-    ;
+      // .attr('class', d=>d.party)
+      // .classed('electoralVoteText', true)
+      // .attr('id', 'ctext')
+    // ;
 
     // ******* TODO: PART III *******
 
